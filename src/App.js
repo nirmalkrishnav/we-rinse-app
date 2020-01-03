@@ -4,6 +4,7 @@ import NavbarComponent from './components/navbar/navbar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Map from './components/Map/Map';
 import Home from './components/Home/Home';
+import Location from './components/Location/Location';
 
 function App() {
   return (
@@ -11,8 +12,10 @@ function App() {
       <NavbarComponent />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/home" component={Home} />
-        <Route path="/map" component={Map} />
+        <Route path="/home" exact component={Home} />
+        <Route path="/map" exact component={Map} />
+        <Route path="/location/:id" component={Location} />
+
       </Switch>
     </Router>
   );
