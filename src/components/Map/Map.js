@@ -8,14 +8,16 @@ class Map extends React.Component {
     _isMounted = false;
 
     state = {
-        isLoading: true
+        isLoading: true,
+        mouseLat: null,
+        mouseLng: null
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            lng: -122.447303,
-            lat: 37.753574,
+            lng: 80.2707,
+            lat: 13.0827,
             zoom: 12,
         };
     }
@@ -47,50 +49,15 @@ class Map extends React.Component {
                 trackUserLocation: true
             })
         );
-        // map.on('move', () => {
-        //     this.setState({
-        //         lng: map.getCenter().lng.toFixed(4),
-        //         lat: map.getCenter().lat.toFixed(4),
-        //         zoom: map.getZoom().toFixed(2)
-        //     });
-        // });
 
-        // map.on('load', () => {
-        //     map.addLayer({
-        //         'id': 'population',
-        //         'type': 'circle',
-        //         'source': {
-        //             type: 'vector',
-        //             url: 'mapbox://examples.8fgz4egr'
-        //         },
-        //         'source-layer': 'sf2010',
-        //         'paint': {
-        //             // make circles larger as the user zooms from z12 to z22
-        //             'circle-radius': {
-        //                 'base': 1.75,
-        //                 'stops': [
-        //                     [12, 2],
-        //                     [22, 180]
-        //                 ]
-        //             },
-        //             // color circles by ethnicity, using a match expression
-        //             // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
-        //             'circle-color': [
-        //                 'match',
-        //                 ['get', 'ethnicity'],
-        //                 'White',
-        //                 '#fbb03b',
-        //                 'Black',
-        //                 '#223b53',
-        //                 'Hispanic',
-        //                 '#e55e5e',
-        //                 'Asian',
-        //                 '#3bb2d0',
-        //     /* other */ '#ccc'
-        //             ]
-        //         }
-        //     });
-        // });
+        map.on('click', (e) => {
+            this.setState({
+                mouseLat: e.lngLat.lat,
+                mouseLng: e.lngLat.lng
+            })
+            alert(this.state.mouseLat)
+        });
+
     }
 
 
