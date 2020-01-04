@@ -15,15 +15,28 @@ class Map extends React.Component {
 
     constructor(props) {
         super(props);
+
+
         this.state = {
             lng: 80.2707,
             lat: 13.0827,
             zoom: 12,
         };
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position);
+            this.setState({
+                lng: position.coords.longitude,
+                lat: position.coords.latitude,
+            })
+        });
+
     }
 
     componentDidMount() {
         this._isMounted = true;
+        console.log(this._isMounted);
+
         const map = new mapboxgl.Map({
             container: this.mapContainer,
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -31,7 +44,6 @@ class Map extends React.Component {
             zoom: this.state.zoom,
             attributionControl: false,
         });
-
         map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: {
                 enableHighAccuracy: true
@@ -39,16 +51,10 @@ class Map extends React.Component {
             trackUserLocation: true
         }), 'bottom-right');
 
+
         map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
         // Add geolocate control to the map.
-        map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-                trackUserLocation: true
-            })
-        );
+     
 
         map.on('click', (e) => {
             this.setState({

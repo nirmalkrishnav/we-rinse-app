@@ -3,7 +3,6 @@ import './App.css';
 import NavbarComponent from './components/navbar/navbar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Map from './components/Map/Map';
-import Home from './components/Home/Home';
 import Location from './components/Location/Location';
 
 function App() {
@@ -11,8 +10,8 @@ function App() {
     <Router>
       <NavbarComponent />
       <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/home" exact component={Home} />
+        <Route path="/" exact component={Map} />
+        <Route path="/home" exact component={Map} />
         <Route path="/map" exact component={Map} />
         <Route path="/location/:id" component={Location} />
 
