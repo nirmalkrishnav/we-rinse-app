@@ -20,8 +20,16 @@ class Map extends React.Component {
         this.state = {
             lng: 80.2707,
             lat: 13.0827,
-            zoom: 12,
+            zoom: 16,
         };
+
+
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+        console.log(this._isMounted);
+
 
         navigator.geolocation.getCurrentPosition((position) => {
             console.log(position);
@@ -29,13 +37,12 @@ class Map extends React.Component {
                 lng: position.coords.longitude,
                 lat: position.coords.latitude,
             })
+            this.createMap();
         });
 
     }
 
-    componentDidMount() {
-        this._isMounted = true;
-        console.log(this._isMounted);
+    createMap() {
 
         const map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -54,7 +61,7 @@ class Map extends React.Component {
 
         map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
         // Add geolocate control to the map.
-     
+
 
         map.on('click', (e) => {
             this.setState({
@@ -65,8 +72,6 @@ class Map extends React.Component {
         });
 
     }
-
-
     componentWillUnmount() {
         this._isMounted = false;
     }
