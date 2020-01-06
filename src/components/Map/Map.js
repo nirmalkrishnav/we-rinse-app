@@ -68,7 +68,9 @@ class Map extends React.Component {
                 mouseLat: e.lngLat.lat,
                 mouseLng: e.lngLat.lng
             })
-            alert(this.state.mouseLat)
+            if (window.confirm('Do you want to mark this location dirty?')){
+                console.log(process.env.REACT_APP_BASE_URL);
+            }
         });
 
     }
