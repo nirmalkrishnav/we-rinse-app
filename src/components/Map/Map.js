@@ -99,7 +99,38 @@ class Map extends React.Component {
             map.addSource('earthquakes', {
                 'type': 'geojson',
                 'data':
-                    'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+                {
+                    "type": "FeatureCollection",
+                    "features": [
+                        {
+                            "type": "Feature",
+                            "properties": {},
+                            "geometry": {
+                                "type": "Polygon",
+                                "coordinates": [
+                                    [
+                                        [
+                                            80.25292217731474,
+                                            13.051359608489099
+                                        ],
+                                        [
+                                            80.25218725204468,
+                                            13.049985207554927
+                                        ],
+                                        [
+                                            80.25400042533875,
+                                            13.050544375397017
+                                        ],
+                                        [
+                                            80.25292217731474,
+                                            13.051359608489099
+                                        ]
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                }
             });
 
             map.addLayer(
