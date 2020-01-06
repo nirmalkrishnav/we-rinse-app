@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Map.css';
 import mapboxgl from 'mapbox-gl';
+import axios from 'axios';
+const uuidv1 = require('uuid/v1');
+
 mapboxgl.accessToken = 'pk.eyJ1IjoibmlybWFsa3Jpc2huYXYiLCJhIjoiY2s0eWd3ZGs5MDBnajNmbXM3OGRtZmhrbiJ9.qbH0J1Y2ykTeKRuJnNiKtg';
 
 class Map extends React.Component {
@@ -64,12 +67,23 @@ class Map extends React.Component {
 
 
         map.on('click', (e) => {
+            e.preventDefault();
             this.setState({
                 mouseLat: e.lngLat.lat,
                 mouseLng: e.lngLat.lng
             })
-            if (window.confirm('Do you want to mark this location dirty?')){
-                console.log(process.env.REACT_APP_BASE_URL);
+            if (window.confirm('Do you want to mark this location dirty?')) {
+                const data = {
+                    storeId: uuidv1(),
+                    location: {
+                        coordinates: [e.lngLat.lat, e.lngLat.lng]
+                    }
+                };
+                axios.post(`${process.env.REACT_APP_API_URL}api/v1/stores`, data)
+                    .then(res => {
+                        console.log(res);
+                        console.log(res.data);
+                    })
             }
         });
 
