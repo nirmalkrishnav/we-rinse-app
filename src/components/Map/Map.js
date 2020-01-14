@@ -13,7 +13,8 @@ class Map extends React.Component {
     state = {
         isLoading: true,
         mouseLat: null,
-        mouseLng: null
+        mouseLng: null,
+        dataPoints: null
     }
 
     constructor(props) {
@@ -22,7 +23,8 @@ class Map extends React.Component {
         this.state = {
             lng: 80.2707,
             lat: 13.0827,
-            zoom: 16,
+            zoom: 14,
+            dataPoints: null
         };
 
 
@@ -49,6 +51,7 @@ class Map extends React.Component {
             .then(res => {
                 console.log(res);
                 console.log(res.data);
+                this.setState({ dataPoints: res.data })
             })
     }
 
@@ -61,6 +64,8 @@ class Map extends React.Component {
             zoom: this.state.zoom,
             attributionControl: false,
         });
+
+        const dataPoints = this.state.dataPoints;
         map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: {
                 enableHighAccuracy: true
@@ -80,11 +85,15 @@ class Map extends React.Component {
             if (window.confirm('Do you want to mark this location dirty?')) {
                 const data = {
                     storeId: uuidv1(),
-                    type: "Feature",
-                    properties: {},
-                    geometry: {
-                        type: "Point",
-                        coordinates: [e.lngLat.lat, e.lngLat.lng]
+                    location: {
+                        type: 'Feature',
+                        properties: {
+                            mag: 3,
+                        },
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [e.lngLat.lng, e.lngLat.lat]
+                        }
                     }
                 };
                 axios.post(`${process.env.REACT_APP_API_URL}api/v1/stores`, data)
@@ -95,7 +104,7 @@ class Map extends React.Component {
             }
         });
 
-
+        console.log(dataPoints);
         map.on('load', function () {
             // Add a geojson point source.
             // Heatmap layers also work with a vector tile source.
@@ -104,35 +113,7 @@ class Map extends React.Component {
                 'data':
                 {
                     "type": "FeatureCollection",
-                    "features": [
-                        {
-                            "type": "Feature",
-                            "properties": {},
-                            "geometry": {
-                                "type": "Polygon",
-                                "coordinates": [
-                                    [
-                                        [
-                                            80.25292217731474,
-                                            13.051359608489099
-                                        ],
-                                        [
-                                            80.25218725204468,
-                                            13.049985207554927
-                                        ],
-                                        [
-                                            80.25400042533875,
-                                            13.050544375397017
-                                        ],
-                                        [
-                                            80.25292217731474,
-                                            13.051359608489099
-                                        ]
-                                    ]
-                                ]
-                            }
-                        }
-                    ]
+                    "features": dataPoints.data
                 }
             });
 
@@ -159,7 +140,7 @@ class Map extends React.Component {
                             ['linear'],
                             ['get', 'mag'],
                             1,
-                            'rgba(33,102,172,0)',
+                            'rgba(33,102,172,0.4)',
                             2,
                             'rgb(103,169,207)',
                             3,
@@ -193,14 +174,6 @@ class Map extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-
-
-    // fetchItems = async () => {
-    //     const serviceCall = await fetch('http://localhost:5000/api/v1/stores');
-    //     const items = await serviceCall.json();
-    //     console.log(items.data);
-    //     // setItems(items.data);
-    // }
 
     render() {
         return (
