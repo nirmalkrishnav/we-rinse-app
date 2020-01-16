@@ -33,14 +33,25 @@ class NavbarComponent extends React.Component {
 
                 <Modal show={this.state.show} onHide={() => this.toggleModal(false)} animation={false}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
+                        <Modal.Title>About <b>We Rinse</b></Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                    <Modal.Body>
+                        <p>
+                            Census of all accumulated trash dumped around your city!</p>
+                        <p>
+                            How to contribute
+                        </p>
+                        <ol>
+                            <li>Allow anonymous location access</li>
+                            <li>Click on the location in map you want to mark as dumped</li>
+                            <li>Select the severity </li>
+                            <li>Hit Okay to save</li>
+                        </ol>
+                    </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => this.toggleModal(false)}>
-                            Close </Button>
                         <Button variant="primary" onClick={() => this.toggleModal(false)}>
-                            Save Changes  </Button>
+                            Great Inititative
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div >
