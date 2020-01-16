@@ -1,3 +1,9 @@
 .floating-nav-bar {
     margin: 15px;
 }
+
+small {
+    flex-flow: column;
+    display: flex;
+    flex-grow: 1;
+}

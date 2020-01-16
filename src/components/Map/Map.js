@@ -244,6 +244,9 @@ class Map extends React.Component {
 
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.toggleModal(false)}>
+                            Close
+                        </Button>
                         <Button variant="primary" onClick={() => this.saveLocation()}>
                             Save
                         </Button>

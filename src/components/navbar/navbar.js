@@ -47,8 +47,15 @@ class NavbarComponent extends React.Component {
                             <li>Select the severity </li>
                             <li>Hit Okay to save</li>
                         </ol>
+
+
                     </Modal.Body>
                     <Modal.Footer>
+                        <small>
+                            Made with ❤️ from Chennai <br />
+                            React, Express, MongoDb, Mapbox <br />
+                            <a href="https://github.com/nirmalkrishnav/we-rinse-app" target="_blank">Github</a>
+                        </small>
                         <Button variant="primary" onClick={() => this.toggleModal(false)}>
                             Great Inititative
                         </Button>
