@@ -23,7 +23,7 @@ class Map extends React.Component {
         this.state = {
             lng: 80.2707,
             lat: 13.0827,
-            zoom: 14,
+            zoom: 18,
             dataPoints: null
         };
 
@@ -32,16 +32,12 @@ class Map extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        console.log(this._isMounted);
-
-        this.getStores();
         navigator.geolocation.getCurrentPosition((position) => {
-            console.log(position);
             this.setState({
                 lng: position.coords.longitude,
                 lat: position.coords.latitude,
             })
-            this.createMap();
+            this.getStores();
         });
 
     }
@@ -52,6 +48,7 @@ class Map extends React.Component {
                 console.log(res);
                 console.log(res.data);
                 this.setState({ dataPoints: res.data })
+                this.createMap();
             })
     }
 
@@ -100,11 +97,12 @@ class Map extends React.Component {
                     .then(res => {
                         console.log(res);
                         console.log(res.data);
+                        this.getStores();
                     })
             }
         });
 
-        console.log(dataPoints);
+
         map.on('load', function () {
             // Add a geojson point source.
             // Heatmap layers also work with a vector tile source.
@@ -178,16 +176,6 @@ class Map extends React.Component {
     render() {
         return (
 
-            /* {
-                   items.map(item => (
-                       <div key={item.storeId}>
-                           <Link to={`/location/${item.storeId}`}>
-                               <h1>{item.storeId}</h1>
-                               <h2>{item.location.formattedAddress}</h2>
-                           </Link>
-                       </div>
-                   ))
-               } */
             <div>
                 <div className='sidebarStyle'>
                     <div>Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom: {this.state.zoom}</div>
