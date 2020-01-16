@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import './Map.css';
 import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
