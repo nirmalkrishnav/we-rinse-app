@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Map.css';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Modal, Container, Row, Col } from 'react-bootstrap';
+
 import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
 const uuidv1 = require('uuid/v1');
@@ -13,7 +15,9 @@ class Map extends React.Component {
         isLoading: true,
         mouseLat: null,
         mouseLng: null,
-        dataPoints: null
+        dataPoints: null,
+        showModal: false,
+        mag: 1
     }
 
     constructor(props) {
@@ -23,11 +27,18 @@ class Map extends React.Component {
             lng: 80.2707,
             lat: 13.0827,
             zoom: 18,
-            dataPoints: null
+            dataPoints: null,
+            showModal: false,
+            mag: 1
         };
-
-
     }
+
+    toggleModal = (val) => {
+        this.setState({
+            showModal: val
+        })
+    };
+
 
     componentDidMount() {
         this._isMounted = true;
@@ -74,31 +85,13 @@ class Map extends React.Component {
 
         map.on('click', (e) => {
             e.preventDefault();
+
+            this.toggleModal(true);
             this.setState({
                 mouseLat: e.lngLat.lat,
                 mouseLng: e.lngLat.lng
             })
-            if (window.confirm('Do you want to mark this location dirty?')) {
-                const data = {
-                    storeId: uuidv1(),
-                    location: {
-                        type: 'Feature',
-                        properties: {
-                            mag: 3,
-                        },
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [e.lngLat.lng, e.lngLat.lat]
-                        }
-                    }
-                };
-                axios.post(`${process.env.REACT_APP_API_URL}api/v1/stores`, data)
-                    .then(res => {
-                        console.log(res);
-                        console.log(res.data);
-                        this.getStores();
-                    })
-            }
+            this.toggleModal(true);
         });
 
 
@@ -172,6 +165,53 @@ class Map extends React.Component {
         this._isMounted = false;
     }
 
+
+    changeHandler = event => {
+
+        const magni = parseInt(event.target.value);
+
+        this.setState({
+            mag: magni
+        });
+
+    }
+
+    resetValues() {
+        this.setState({
+            mag: 1
+        });
+    }
+
+
+    saveLocation() {
+
+        if (this.state.mag === null) {
+            return
+        }
+        console.log(this.state)
+        const data = {
+            storeId: uuidv1(),
+            location: {
+                type: 'Feature',
+                properties: {
+                    mag: this.state.mag,
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [this.state.mouseLng, this.state.mouseLat]
+                }
+            }
+        };
+        axios.post(`${process.env.REACT_APP_API_URL}api/v1/stores`, data)
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                this.resetValues();
+                this.toggleModal(false);
+                this.getStores();
+            })
+    }
+
     render() {
         return (
 
@@ -180,6 +220,36 @@ class Map extends React.Component {
                     <div>Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom: {this.state.zoom}</div>
                 </div>
                 <div ref={el => this.mapContainer = el} className='mapContainer' />
+
+
+                <Modal show={this.state.showModal} onHide={() => this.toggleModal(false)} animation={false}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add..</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+
+                        <Form>
+                            <Form.Group controlId="exampleForm.ControlSelect1" value={this.state.mag}
+                                onChange={this.changeHandler} >
+                                <Form.Label> Severity</Form.Label>
+                                <Form.Control as="select">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </Form.Control>
+                            </Form.Group>
+                        </Form>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={() => this.saveLocation()}>
+                            Save
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
         );
     }
